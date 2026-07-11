@@ -97,7 +97,7 @@ export function HeroSticky({ headshotUrl, fullName, tagline, bio }: HeroStickyPr
       <div className="relative">
         <div
           id="hero-section"
-          className="relative flex h-screen items-center justify-center px-5 pt-20 tablet:items-start tablet:pt-24 desktop:pt-28"
+          className="relative flex h-screen items-center justify-center px-5"
         >
           <div className="relative">
             {/* H1's box is forced to the full available width once the
