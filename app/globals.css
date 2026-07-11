@@ -1,26 +1,34 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  /* Fixed 3-tier breakpoints from the design audit (mobile-first: unprefixed = phone) */
+  --breakpoint-tablet: 810px;
+  --breakpoint-desktop: 1280px;
+
+  /* Color tokens. Opacity variants (cream/50, black/10, etc.) come for free
+     via Tailwind's built-in color-mix opacity modifiers — no need to define
+     separate tokens per alpha value. */
+  --color-cream: #faf7f3;
+  --color-black: #111111;
+  --color-red: #eb4d6d;
+
+  --font-archivo: var(--font-archivo-sans), sans-serif;
+
+  /* Clash Grotesk (used sparingly for "/Label" style slash text) isn't on
+     Google Fonts. It's free for commercial use via fontshare.com/@indian-type-foundry —
+     download the woff2 files, drop them in public/fonts/, and add an
+     @font-face block here + swap this fallback for the real family name.
+     Until then this falls back to Archivo, which is close enough in spirit. */
+  --font-clash: var(--font-archivo-sans), sans-serif;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  html {
+    background-color: var(--color-cream);
   }
-}
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  body {
+    background-color: var(--color-cream);
+    color: var(--color-black);
+  }
 }

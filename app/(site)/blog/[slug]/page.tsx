@@ -1,0 +1,123 @@
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import Image from "next/image";
+import { getPostBySlug, getRelatedPosts } from "@/lib/data/blog";
+import { getProfile } from "@/lib/data/profile";
+import { getMediaUrl } from "@/lib/supabase/storage";
+import { GradientPlaceholder } from "@/components/site/GradientPlaceholder";
+import { BlogCard } from "@/components/site/BlogCard";
+import { BlogSidebar } from "@/components/site/BlogSidebar";
+import { MarkdownContent } from "@/components/site/MarkdownContent";
+import { H1b, Body16, Body18, Label } from "@/components/ui/typography";
+import { SITE_URL } from "@/lib/constants";
+
+type PageProps = { params: Promise<{ slug: string }> };
+
+export default async function BlogDetailPage({ params }: PageProps) {
+  const { slug } = await params;
+  const post = await getPostBySlug(slug);
+  if (!post) notFound();
+
+  const [related, profile] = await Promise.all([
+    getRelatedPosts(post.id, 3),
+    getProfile(),
+  ]);
+  const imageUrl = getMediaUrl(post.cover_image_path);
+  const date = post.published_at
+    ? new Date(post.published_at).toLocaleDateString("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+      })
+    : null;
+
+  const articleJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: post.title,
+    description: post.summary,
+    url: `${SITE_URL}/blog/${post.slug}`,
+    ...(post.published_at && { datePublished: post.published_at }),
+    dateModified: post.updated_at,
+    ...(imageUrl && { image: imageUrl }),
+    author: { "@type": "Person", name: profile?.full_name ?? "Ayodele John" },
+  };
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+      />
+      <section className="mx-auto max-w-[1080px] px-5 pt-[160px] pb-20 tablet:px-10 desktop:px-5">
+        <div className="flex flex-col gap-10 desktop:flex-row desktop:items-start">
+          <div className="min-w-0 flex-1">
+            <H1b reveal className="max-w-[800px] text-balance">
+              {post.title}
+            </H1b>
+            <div className="mt-4 flex flex-wrap items-center gap-3 text-black/40">
+              {date && <Body16>{date}</Body16>}
+              {post.read_time_minutes && (
+                <>
+                  <span aria-hidden="true">·</span>
+                  <Body16>{post.read_time_minutes} min read</Body16>
+                </>
+              )}
+            </div>
+            <Body18
+              reveal
+              trigger="mount"
+              className="mt-6 max-w-[800px] text-black/60"
+            >
+              {post.summary}
+            </Body18>
+
+            <div className="relative mt-10 aspect-[16/9] w-full overflow-hidden rounded-3xl">
+              {imageUrl ? (
+                <Image
+                  src={imageUrl}
+                  alt={post.title}
+                  fill
+                  sizes="(min-width: 1280px) 780px, 100vw"
+                  className="object-cover"
+                  priority
+                />
+              ) : (
+                <GradientPlaceholder seed={post.title} />
+              )}
+            </div>
+
+            <div className="mt-16">
+              <MarkdownContent content={post.body} />
+            </div>
+          </div>
+
+          <BlogSidebar contactEmail={profile?.contact_email ?? null} />
+        </div>
+      </section>
+
+      {related.length > 0 && (
+        <section className="mx-auto max-w-[1080px] px-5 pb-20 tablet:px-10 desktop:px-5">
+          <Label className="mb-6 block">/More Articles</Label>
+          <div className="grid grid-cols-1 gap-5 tablet:grid-cols-3">
+            {related.map((p) => (
+              <BlogCard key={p.id} post={p} />
+            ))}
+          </div>
+        </section>
+      )}
+    </>
+  );
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const post = await getPostBySlug(slug);
+  if (!post) return { title: "Post not found" };
+  return {
+    title: post.title,
+    description: post.summary,
+    openGraph: { title: post.title, description: post.summary, type: "article" },
+  };
+}
