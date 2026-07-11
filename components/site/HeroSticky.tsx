@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { SVGProps } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -32,13 +32,35 @@ export function HeroSticky({ headshotUrl, fullName, tagline, bio }: HeroStickyPr
     offset: ["start start", "end end"],
   });
 
-  const avatarY = useSpring(useTransform(scrollYProgress, [0.3, 0.6], [0, 40]), FLIP_SPRING);
+  const avatarY = useSpring(useTransform(scrollYProgress, [0.5, 0.75], [0, 40]), FLIP_SPRING);
+
+  // Phone's avatar box is small enough that it never risked overlapping the
+  // hero title in the first place (unlike tablet/desktop, where a much
+  // bigger box needs the grow-from-small treatment below) — so on phone it
+  // just starts at its real size.
+  const [isPhone, setIsPhone] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 809px)");
+    setIsPhone(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setIsPhone(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
+
+  // Starts small so it can't collide with the centered hero title at scroll
+  // 0, grows to its actual (CSS-declared) size — timed to finish only once
+  // the page has scrolled enough for the title to have cleared the growing
+  // box's path (bigger box needs more scroll clearance than a small one).
   const avatarScale = useSpring(
-    useTransform(scrollYProgress, [0.3, 0.6], [1, 0.85]),
+    useTransform(
+      scrollYProgress,
+      isPhone ? [0.5, 0.75] : [0, 0.4, 0.5, 0.75],
+      isPhone ? [1, 0.85] : [0.4, 1, 1, 0.85],
+    ),
     FLIP_SPRING,
   );
   const avatarRotateY = useSpring(
-    useTransform(scrollYProgress, [0.3, 0.6], [0, 180]),
+    useTransform(scrollYProgress, [0.5, 0.75], [0, 180]),
     FLIP_SPRING,
   );
 
@@ -51,7 +73,7 @@ export function HeroSticky({ headshotUrl, fullName, tagline, bio }: HeroStickyPr
         <div className="sticky top-0 flex h-screen items-end justify-center overflow-hidden pb-5">
           {headshotUrl && (
             <div
-              className="relative h-55 w-47.5 tablet:h-62.5 tablet:w-55 desktop:h-114 desktop:w-100"
+              className="relative h-55 w-47.5 tablet:h-72 tablet:w-63 desktop:h-132 desktop:w-116"
               style={{ perspective: 1600 }}
             >
               <motion.div
@@ -61,6 +83,7 @@ export function HeroSticky({ headshotUrl, fullName, tagline, bio }: HeroStickyPr
                   scale: avatarScale,
                   rotateY: avatarRotateY,
                   transformStyle: "preserve-3d",
+                  transformOrigin: "bottom",
                 }}
               >
                 <div

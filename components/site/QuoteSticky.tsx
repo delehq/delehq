@@ -4,23 +4,25 @@ import { useRef } from "react";
 import { useScroll } from "motion/react";
 import { ScrollColorText } from "@/components/ui/ScrollColorText";
 
-// 150vh outer wrapper + 100vh sticky content — a scroll-held quote moment.
-// The sentence itself scrubs from pale to dark word-by-word as the section
-// scrolls, rather than fading the whole block in at once.
+// Normal-flow scroll reveal — no sticky/pin wrapper. The sentence scrubs
+// from pale to dark word-by-word as it scrolls through the viewport, tied to
+// its OWN position (not an artificial extra-tall wrapper), so there's no
+// leftover dead scroll distance before or after the reveal: the section is
+// exactly as tall as its content, like any other section on the page.
 export function QuoteSticky({ text }: { text: string }) {
-  const ref = useRef<HTMLElement>(null);
+  const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
-    offset: ["start start", "end end"],
+    offset: ["start 0.9", "start 0.35"],
   });
 
   return (
-    <section ref={ref} className="relative h-[120vh] tablet:h-[150vh]">
-      <div className="sticky top-0 flex h-screen items-center justify-center px-5">
+    <section className="px-5 py-32 tablet:py-40 desktop:py-48">
+      <div ref={ref}>
         <ScrollColorText
           text={text}
           progress={scrollYProgress}
-          range={[0.15, 0.55]}
+          range={[0, 1]}
           className="mx-auto max-w-[840px] text-center text-[28px] leading-[1.2] font-medium tracking-[-0.02em] tablet:text-[32px] desktop:text-[36px]"
         />
       </div>
