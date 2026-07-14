@@ -101,7 +101,7 @@ export function BlogForm({
         )}
       </div>
 
-      <div className="w-full max-w-[420px] shrink-0 desktop:sticky desktop:top-8">
+      <div className="w-full max-w-[420px] shrink-0 desktop:sticky desktop:top-8 desktop:max-h-[calc(100vh-4rem)] desktop:overflow-y-auto">
         <p className="mb-3 text-[13px] font-medium text-black/50">Live preview</p>
         <div className="rounded-2xl border border-black/10 bg-white p-5">
           <div className="relative aspect-[16/9] w-full overflow-hidden rounded-xl">

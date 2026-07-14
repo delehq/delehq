@@ -10,6 +10,7 @@ type Post = {
   summary: string;
   cover_image_path: string | null;
   published_at: string | null;
+  read_time_minutes?: number | null;
 };
 
 export function BlogCard({ post }: { post: Post }) {
@@ -41,7 +42,15 @@ export function BlogCard({ post }: { post: Post }) {
         )}
       </div>
       <div className="flex flex-col gap-1">
-        {date && <Body16 className="text-black/40">{date}</Body16>}
+        {(date || post.read_time_minutes) && (
+          <div className="flex items-center gap-2 text-black/40">
+            {date && <Body16 className="text-black/40">{date}</Body16>}
+            {date && post.read_time_minutes ? <span aria-hidden="true">·</span> : null}
+            {post.read_time_minutes && (
+              <Body16 className="text-black/40">{post.read_time_minutes} min read</Body16>
+            )}
+          </div>
+        )}
         <H5 as="h3">{post.title}</H5>
         <Body16 className="text-black/50">{post.summary}</Body16>
       </div>

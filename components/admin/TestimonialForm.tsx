@@ -35,6 +35,7 @@ export function TestimonialForm({
   const [authorRole, setAuthorRole] = useState(defaults?.author_role ?? "");
   const [quote, setQuote] = useState(defaults?.quote ?? "");
   const [backContent, setBackContent] = useState(defaults?.back_content ?? "");
+  const [avatarPath, setAvatarPath] = useState(defaults?.avatar_path ?? "");
 
   return (
     <div className="flex flex-col gap-10 tablet:flex-row tablet:items-start">
@@ -79,6 +80,7 @@ export function TestimonialForm({
             label="Avatar"
             folder="testimonials"
             defaultPath={defaults?.avatar_path}
+            onPathChange={setAvatarPath}
           />
           <CheckboxField
             name="is_published"
@@ -102,7 +104,7 @@ export function TestimonialForm({
         )}
       </div>
 
-      <div className="w-full max-w-[320px] shrink-0 tablet:sticky tablet:top-8">
+      <div className="w-full max-w-[320px] shrink-0 tablet:sticky tablet:top-8 tablet:max-h-[calc(100vh-4rem)] tablet:overflow-y-auto">
         <p className="mb-3 text-[13px] font-medium text-black/50">Live preview</p>
         <TestimonialCard
           testimonial={{
@@ -110,6 +112,7 @@ export function TestimonialForm({
             back_content: backContent || null,
             author_name: authorName || "Author name",
             author_role: authorRole || null,
+            avatar_path: avatarPath || null,
           }}
         />
       </div>
