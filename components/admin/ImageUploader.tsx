@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type ChangeEvent } from "react";
+import { useRef, useState, type ChangeEvent } from "react";
 import Image from "next/image";
 import { createClient } from "@/lib/supabase/client";
 import { getMediaUrl } from "@/lib/supabase/storage";
@@ -10,15 +10,18 @@ export function ImageUploader({
   label,
   folder,
   defaultPath,
+  onPathChange,
 }: {
   name: string;
   label: string;
   folder: string;
   defaultPath?: string | null;
+  onPathChange?: (path: string) => void;
 }) {
   const [path, setPath] = useState(defaultPath ?? "");
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   async function handleChange(e: ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -39,6 +42,7 @@ export function ImageUploader({
       return;
     }
     setPath(filePath);
+    onPathChange?.(filePath);
   }
 
   const previewUrl = path ? getMediaUrl(path) : null;
@@ -46,20 +50,32 @@ export function ImageUploader({
   return (
     <div className="flex flex-col gap-1.5">
       <label className="text-[14px] text-black/60">{label}</label>
-      {previewUrl && (
-        <div className="relative h-32 w-32 overflow-hidden rounded-xl border border-black/10">
-          <Image src={previewUrl} alt="" fill className="object-cover" />
+      <div className="flex items-center gap-4">
+        {previewUrl && (
+          <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl border border-black/10">
+            <Image src={previewUrl} alt="" fill className="object-cover" />
+          </div>
+        )}
+        <div className="flex flex-col gap-1">
+          <button
+            type="button"
+            onClick={() => inputRef.current?.click()}
+            disabled={uploading}
+            className="rounded-lg border border-black/15 bg-white px-4 py-2 text-[14px] font-medium text-black transition-colors hover:border-black/40 disabled:opacity-50"
+          >
+            {uploading ? "Uploading…" : previewUrl ? "Change image" : "Upload image"}
+          </button>
+          {error && <p className="text-[13px] text-red">{error}</p>}
         </div>
-      )}
+      </div>
       <input
+        ref={inputRef}
         type="file"
         accept="image/*"
         onChange={handleChange}
-        className="text-[13px]"
+        className="sr-only"
       />
       <input type="hidden" name={name} value={path} />
-      {uploading && <p className="text-[13px] text-black/40">Uploading…</p>}
-      {error && <p className="text-[13px] text-red">{error}</p>}
     </div>
   );
 }

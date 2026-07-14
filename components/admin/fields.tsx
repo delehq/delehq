@@ -1,3 +1,5 @@
+import type { ChangeEvent } from "react";
+
 type FieldProps = {
   name: string;
   label: string;
@@ -14,7 +16,8 @@ export function TextField({
   required,
   type = "text",
   placeholder,
-}: FieldProps) {
+  onChange,
+}: FieldProps & { onChange?: (e: ChangeEvent<HTMLInputElement>) => void }) {
   return (
     <div className="flex flex-col gap-1.5">
       <label htmlFor={name} className="text-[14px] text-black/60">
@@ -27,6 +30,7 @@ export function TextField({
         required={required}
         placeholder={placeholder}
         defaultValue={defaultValue ?? undefined}
+        onChange={onChange}
         className="rounded-lg border border-black/15 bg-white px-4 py-2.5 text-[15px] outline-none focus:border-black/40"
       />
     </div>
@@ -40,7 +44,8 @@ export function TextAreaField({
   required,
   rows = 4,
   placeholder,
-}: FieldProps & { rows?: number }) {
+  onChange,
+}: FieldProps & { rows?: number; onChange?: (e: ChangeEvent<HTMLTextAreaElement>) => void }) {
   return (
     <div className="flex flex-col gap-1.5">
       <label htmlFor={name} className="text-[14px] text-black/60">
@@ -53,6 +58,7 @@ export function TextAreaField({
         rows={rows}
         placeholder={placeholder}
         defaultValue={defaultValue ?? undefined}
+        onChange={onChange}
         className="rounded-lg border border-black/15 bg-white px-4 py-2.5 text-[15px] outline-none focus:border-black/40"
       />
     </div>

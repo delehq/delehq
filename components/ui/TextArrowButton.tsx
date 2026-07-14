@@ -21,7 +21,7 @@ export function TextArrowButton({
     <Link
       href={href}
       className={cn(
-        "group inline-flex items-center gap-1.5 text-[16px] font-medium",
+        "group inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap text-[16px] font-medium",
         isPrimary ? "text-black" : "text-cream",
         className,
       )}

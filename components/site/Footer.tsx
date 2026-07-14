@@ -47,6 +47,7 @@ export function Footer({
               <FooterLink href="/#bio-section">About Me</FooterLink>
               <FooterLink href="/#services">Services</FooterLink>
               <FooterLink href="/work">Works</FooterLink>
+              <FooterLink href="/about">Resume</FooterLink>
               {showBlog && <FooterLink href="/blog">Blog</FooterLink>}
               <FooterLink href="/#contact">Contact</FooterLink>
             </div>

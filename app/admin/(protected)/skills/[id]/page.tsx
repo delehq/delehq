@@ -21,19 +21,19 @@ export default async function EditSkillPage({ params }: PageProps) {
   const deleteWithId = deleteSkill.bind(null, id);
 
   return (
-    <form action={updateWithId} className="flex max-w-[560px] flex-col gap-4">
-      <h1 className="text-[24px] font-semibold">Edit skill</h1>
-      <TextField name="category" label="Category" defaultValue={item.category} required />
-      <TextField name="name" label="Skill name" defaultValue={item.name} required />
-      <TextField name="sort_order" label="Sort order (within category)" type="number" defaultValue={item.sort_order} />
-      <div className="flex items-center gap-4">
+    <div className="flex max-w-[560px] flex-col gap-4">
+      <form action={updateWithId} className="flex flex-col gap-4">
+        <h1 className="text-[24px] font-semibold">Edit skill</h1>
+        <TextField name="category" label="Category" defaultValue={item.category} required />
+        <TextField name="name" label="Skill name" defaultValue={item.name} required />
+        <TextField name="sort_order" label="Sort order (within category)" type="number" defaultValue={item.sort_order} />
         <AdminSubmitButton>Save changes</AdminSubmitButton>
-        <DeleteForm action={deleteWithId}>
-          <button type="submit" className="text-[14px] text-red">
-            Delete
-          </button>
-        </DeleteForm>
-      </div>
-    </form>
+      </form>
+      <DeleteForm action={deleteWithId}>
+        <button type="submit" className="text-[14px] text-red">
+          Delete skill
+        </button>
+      </DeleteForm>
+    </div>
   );
 }

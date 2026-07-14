@@ -13,11 +13,11 @@ export default async function AdminServicesPage() {
       <div className="flex flex-col divide-y divide-black/10 rounded-2xl border border-black/10 bg-white">
         {items.map((item) => (
           <div key={item.id} className="flex items-center justify-between gap-4 px-5 py-4">
-            <div>
-              <p className="text-[15px] font-medium">{item.title}</p>
-              <p className="max-w-[420px] text-[13px] text-black/50">{item.description}</p>
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-[15px] font-medium">{item.title}</p>
+              <p className="truncate text-[13px] text-black/50">{item.description}</p>
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex shrink-0 items-center gap-3">
               <Link href={`/admin/services/${item.id}`} className="text-[13px] underline">
                 Edit
               </Link>

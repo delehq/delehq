@@ -12,6 +12,19 @@ export async function getPublishedProjects(limit?: number) {
   return data ?? [];
 }
 
+export async function getPublishedProjectsPaged(page: number, pageSize: number) {
+  const supabase = await createClient();
+  const from = (page - 1) * pageSize;
+  const to = from + pageSize - 1;
+  const { data, count } = await supabase
+    .from("projects")
+    .select("*", { count: "exact" })
+    .eq("is_published", true)
+    .order("created_at", { ascending: false })
+    .range(from, to);
+  return { items: data ?? [], count: count ?? 0 };
+}
+
 export async function getProjectBySlug(slug: string) {
   const supabase = await createClient();
   const { data } = await supabase

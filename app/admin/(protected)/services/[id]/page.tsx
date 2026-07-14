@@ -21,25 +21,25 @@ export default async function EditServicePage({ params }: PageProps) {
   const deleteWithId = deleteService.bind(null, id);
 
   return (
-    <form action={updateWithId} className="flex max-w-[560px] flex-col gap-4">
-      <h1 className="text-[24px] font-semibold">Edit service</h1>
-      <TextField name="title" label="Title" defaultValue={item.title} required />
-      <TextAreaField
-        name="description"
-        label="Description"
-        rows={3}
-        defaultValue={item.description}
-        required
-      />
-      <TextField name="sort_order" label="Sort order" type="number" defaultValue={item.sort_order} />
-      <div className="flex items-center gap-4">
+    <div className="flex max-w-[560px] flex-col gap-4">
+      <form action={updateWithId} className="flex flex-col gap-4">
+        <h1 className="text-[24px] font-semibold">Edit service</h1>
+        <TextField name="title" label="Title" defaultValue={item.title} required />
+        <TextAreaField
+          name="description"
+          label="Description"
+          rows={3}
+          defaultValue={item.description}
+          required
+        />
+        <TextField name="sort_order" label="Sort order" type="number" defaultValue={item.sort_order} />
         <AdminSubmitButton>Save changes</AdminSubmitButton>
-        <DeleteForm action={deleteWithId}>
-          <button type="submit" className="text-[14px] text-red">
-            Delete
-          </button>
-        </DeleteForm>
-      </div>
-    </form>
+      </form>
+      <DeleteForm action={deleteWithId}>
+        <button type="submit" className="text-[14px] text-red">
+          Delete service
+        </button>
+      </DeleteForm>
+    </div>
   );
 }

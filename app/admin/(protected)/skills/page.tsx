@@ -19,8 +19,8 @@ export default async function AdminSkillsPage() {
             <div className="flex flex-col divide-y divide-black/10">
               {group.items.map((item) => (
                 <div key={item.id} className="flex items-center justify-between gap-4 px-5 py-3">
-                  <p className="text-[14px]">{item.name}</p>
-                  <div className="flex items-center gap-3">
+                  <p className="min-w-0 flex-1 truncate text-[14px]">{item.name}</p>
+                  <div className="flex shrink-0 items-center gap-3">
                     <Link href={`/admin/skills/${item.id}`} className="text-[13px] underline">
                       Edit
                     </Link>

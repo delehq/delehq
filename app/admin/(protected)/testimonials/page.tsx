@@ -17,8 +17,8 @@ export default async function AdminTestimonialsPage() {
       <div className="flex flex-col divide-y divide-black/10 rounded-2xl border border-black/10 bg-white">
         {(items ?? []).map((item) => (
           <div key={item.id} className="flex items-center justify-between gap-4 px-5 py-4">
-            <div>
-              <p className="text-[15px] font-medium">
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-[15px] font-medium">
                 {item.author_name}
                 {!item.is_published && (
                   <span className="ml-2 rounded-full bg-black/10 px-2 py-0.5 text-[11px] text-black/50">
@@ -26,9 +26,9 @@ export default async function AdminTestimonialsPage() {
                   </span>
                 )}
               </p>
-              <p className="max-w-[420px] truncate text-[13px] text-black/50">{item.quote}</p>
+              <p className="truncate text-[13px] text-black/50">{item.quote}</p>
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex shrink-0 items-center gap-3">
               <Link href={`/admin/testimonials/${item.id}`} className="text-[13px] underline">
                 Edit
               </Link>

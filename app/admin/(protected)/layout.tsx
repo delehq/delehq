@@ -10,9 +10,9 @@ export default async function ProtectedAdminLayout({
   await requireAdminSession();
 
   return (
-    <div className="flex min-h-screen bg-[#f5f5f4] text-black">
+    <div className="flex h-screen flex-col overflow-hidden bg-[#f5f5f4] text-black tablet:flex-row">
       <AdminSidebar />
-      <main className="flex-1 overflow-x-hidden p-8">{children}</main>
+      <main className="flex-1 overflow-x-hidden overflow-y-auto p-5 tablet:p-8">{children}</main>
     </div>
   );
 }
