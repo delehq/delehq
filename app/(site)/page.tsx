@@ -15,6 +15,7 @@ import { SocialIcon } from "@/components/ui/SocialIcon";
 import { H2, Body18 } from "@/components/ui/typography";
 import { TextArrowButton } from "@/components/ui/TextArrowButton";
 import { RevealBlock } from "@/components/ui/RevealBlock";
+import { SPRING_LIST, listStagger } from "@/lib/motion/presets";
 import { SITE_URL } from "@/lib/constants";
 
 export default async function HomePage() {
@@ -71,12 +72,10 @@ export default async function HomePage() {
             Services
           </H2>
           <div className="flex flex-col">
-            {services.map((service) => (
-              <ServiceCard
-                key={service.id}
-                title={service.title}
-                description={service.description}
-              />
+            {services.map((service, i) => (
+              <RevealBlock key={service.id} y={16} transition={{ ...SPRING_LIST, delay: listStagger(i) }}>
+                <ServiceCard title={service.title} description={service.description} />
+              </RevealBlock>
             ))}
           </div>
         </section>
@@ -91,8 +90,8 @@ export default async function HomePage() {
             <TextArrowButton href="/work">View All Work</TextArrowButton>
           </div>
           <div className="grid grid-cols-1 gap-4 tablet:grid-cols-2">
-            {projects.map((project) => (
-              <RevealBlock key={project.id}>
+            {projects.map((project, i) => (
+              <RevealBlock key={project.id} transition={{ ...SPRING_LIST, delay: listStagger(i) }}>
                 <ProjectCard project={project} />
               </RevealBlock>
             ))}
@@ -106,8 +105,8 @@ export default async function HomePage() {
             Testimonials
           </H2>
           <div className="grid grid-cols-1 gap-4 tablet:grid-cols-2 desktop:grid-cols-4">
-            {testimonials.map((testimonial) => (
-              <RevealBlock key={testimonial.id}>
+            {testimonials.map((testimonial, i) => (
+              <RevealBlock key={testimonial.id} transition={{ ...SPRING_LIST, delay: listStagger(i) }}>
                 <TestimonialCard testimonial={testimonial} />
               </RevealBlock>
             ))}
@@ -121,8 +120,8 @@ export default async function HomePage() {
             Thoughts
           </H2>
           <div className="grid grid-cols-1 gap-4 tablet:grid-cols-3">
-            {posts.map((post) => (
-              <RevealBlock key={post.id}>
+            {posts.map((post, i) => (
+              <RevealBlock key={post.id} transition={{ ...SPRING_LIST, delay: listStagger(i) }}>
                 <BlogCard post={post} />
               </RevealBlock>
             ))}
@@ -152,7 +151,7 @@ export default async function HomePage() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={s.platform}
-                    className="flex h-9 w-9 items-center justify-center rounded-lg bg-black/5 text-black/70 transition-colors hover:bg-black/10"
+                    className="flex h-11 w-11 items-center justify-center rounded-lg bg-black/5 text-black/70 transition-colors hover:bg-black/10"
                   >
                     <SocialIcon platform={s.platform} />
                   </a>

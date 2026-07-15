@@ -67,7 +67,7 @@ export function Navbar({
           onClick={() => setOpen((v) => !v)}
           aria-label={open ? "Close menu" : "Open menu"}
           aria-expanded={open}
-          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-cream text-black"
+          className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-cream text-black before:absolute before:-inset-1.5 before:content-['']"
         >
           {open ? <X size={16} /> : <Menu size={16} />}
         </button>

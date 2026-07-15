@@ -38,3 +38,18 @@ export const SPRING_NAVBAR: Transition = {
   bounce: 0.15,
   delay: 1.4,
 };
+
+// Snappier than SPRING_CARD — for dense list rows (resume entries, skill
+// pills) where each item reveals close on the heels of the last one; a slow
+// 1.8s spring per row reads as sluggish once several are cascading in.
+export const SPRING_LIST: Transition = {
+  type: "spring",
+  duration: 0.6,
+  bounce: 0.1,
+};
+
+// Cascading reveal delay for grid/list items — capped so long lists (8+
+// items) don't leave the last one waiting on a sluggish tail.
+export function listStagger(index: number, step = 0.07, cap = 8) {
+  return Math.min(index, cap) * step;
+}

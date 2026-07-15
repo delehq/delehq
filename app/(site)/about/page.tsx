@@ -7,6 +7,7 @@ import { getProfile } from "@/lib/data/profile";
 import { getMediaUrl } from "@/lib/supabase/storage";
 import { H1b, H4, H5, Body16, Body18, Label } from "@/components/ui/typography";
 import { RevealBlock } from "@/components/ui/RevealBlock";
+import { SPRING_LIST, listStagger } from "@/lib/motion/presets";
 
 export const metadata: Metadata = {
   title: "Resume",
@@ -35,9 +36,7 @@ function DescriptionList({ description }: { description: string | null }) {
       </ul>
     );
   }
-  return (
-    <Body16 className="mt-3 text-black/60">{description}</Body16>
-  );
+  return <Body16 className="mt-3 text-black/60">{description}</Body16>;
 }
 
 export default async function AboutPage() {
@@ -72,9 +71,15 @@ export default async function AboutPage() {
       {experience.length > 0 && (
         <div className="mt-20">
           <Label className="mb-8 block">/Experience</Label>
-          <div className="flex flex-col gap-12">
-            {experience.map((item) => (
-              <RevealBlock key={item.id}>
+          <div className="relative flex flex-col gap-12 border-l border-black/10 pl-8">
+            {experience.map((item, i) => (
+              <RevealBlock
+                key={item.id}
+                y={16}
+                transition={{ ...SPRING_LIST, delay: listStagger(i) }}
+                className="relative"
+              >
+                <span className="absolute top-1.5 -left-9.25 h-2.5 w-2.5 rounded-full bg-black" />
                 <div className="flex flex-col gap-1 tablet:flex-row tablet:items-baseline tablet:justify-between">
                   <H5 as="h3">
                     {item.role} <span className="text-black/40">· {item.company}</span>
@@ -96,8 +101,12 @@ export default async function AboutPage() {
           <div>
             <Label className="mb-8 block">/Education</Label>
             <div className="flex flex-col gap-8">
-              {education.map((item) => (
-                <RevealBlock key={item.id}>
+              {education.map((item, i) => (
+                <RevealBlock
+                  key={item.id}
+                  y={16}
+                  transition={{ ...SPRING_LIST, delay: listStagger(i) }}
+                >
                   <H5 as="h3">{item.institution}</H5>
                   <Body16 className="mt-1 text-black/60">{item.credential}</Body16>
                   <Body16 className="mt-1 text-black/40">
@@ -115,16 +124,28 @@ export default async function AboutPage() {
           <div>
             <Label className="mb-8 block">/Certifications</Label>
             <div className="flex flex-col gap-8">
-              {certifications.map((item) => (
-                <RevealBlock key={item.id}>
+              {certifications.map((item, i) => (
+                <RevealBlock
+                  key={item.id}
+                  y={16}
+                  transition={{ ...SPRING_LIST, delay: listStagger(i) }}
+                >
                   {item.credential_url ? (
                     <a
                       href={item.credential_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="hover:underline"
+                      className="group inline-flex items-center gap-1.5"
                     >
-                      <H5 as="h3">{item.name}</H5>
+                      <H5 as="h3" className="transition-colors group-hover:text-red">
+                        {item.name}
+                      </H5>
+                      <span
+                        aria-hidden="true"
+                        className="text-black/30 opacity-0 transition-opacity group-hover:opacity-100"
+                      >
+                        ↗
+                      </span>
                     </a>
                   ) : (
                     <H5 as="h3">{item.name}</H5>
@@ -144,14 +165,18 @@ export default async function AboutPage() {
         <div className="mt-20">
           <Label className="mb-8 block">/Skills</Label>
           <div className="flex flex-col gap-10">
-            {skills.map((group) => (
-              <RevealBlock key={group.category}>
+            {skills.map((group, gi) => (
+              <RevealBlock
+                key={group.category}
+                y={16}
+                transition={{ ...SPRING_LIST, delay: listStagger(gi) }}
+              >
                 <H4 as="h3">{group.category}</H4>
                 <div className="mt-4 flex flex-wrap gap-2.5">
                   {group.items.map((item) => (
                     <span
                       key={item.id}
-                      className="rounded-full border border-black/15 px-4 py-2 text-[14px] text-black/70"
+                      className="rounded-full border border-black/15 px-4 py-2 text-[14px] text-black/70 transition-colors hover:border-black/40 hover:bg-black/[0.03] hover:text-black"
                     >
                       {item.name}
                     </span>
