@@ -7,6 +7,15 @@ import { RevealBlock } from "@/components/ui/RevealBlock";
 export const metadata: Metadata = {
   title: "Blog",
   description: "Writing on backend systems, fintech engineering, and product delivery from Ayodele John.",
+  alternates: {
+    canonical: "/blog",
+  },
+  openGraph: {
+    title: "Blog — Ayodele John",
+    description: "Writing on backend systems, fintech engineering, and product delivery from Ayodele John.",
+    url: "/blog",
+    type: "website",
+  },
 };
 
 export default async function BlogPage() {

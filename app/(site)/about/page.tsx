@@ -13,6 +13,16 @@ export const metadata: Metadata = {
   title: "Resume",
   description:
     "Ayodele John's work experience, education, certifications, and technical skills.",
+  alternates: {
+    canonical: "/about",
+  },
+  openGraph: {
+    title: "Resume — Ayodele John",
+    description:
+      "Ayodele John's work experience, education, certifications, and technical skills.",
+    url: "/about",
+    type: "profile",
+  },
 };
 
 function formatDate(date: string | null) {

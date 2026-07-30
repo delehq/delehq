@@ -43,12 +43,26 @@ export default async function BlogDetailPage({ params }: PageProps) {
     author: { "@type": "Person", name: profile?.full_name ?? "Ayodele John" },
   };
 
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Blog", item: `${SITE_URL}/blog` },
+      { "@type": "ListItem", position: 2, name: post.title, item: `${SITE_URL}/blog/${post.slug}` },
+    ],
+  };
+
   return (
     <>
       <script
         type="application/ld+json"
         // eslint-disable-next-line react/no-danger
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
       <section className="mx-auto max-w-[1080px] px-5 pt-[160px] pb-20 tablet:px-10 desktop:px-5">
         <div className="flex flex-col gap-10 desktop:flex-row desktop:items-start">
@@ -114,10 +128,33 @@ export default async function BlogDetailPage({ params }: PageProps) {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const post = await getPostBySlug(slug);
-  if (!post) return { title: "Post not found" };
+  if (!post) {
+    return { title: "Post not found", robots: { index: false, follow: true } };
+  }
+
+  const imageUrl = getMediaUrl(post.cover_image_path);
+  const url = `/blog/${post.slug}`;
+
   return {
     title: post.title,
     description: post.summary,
-    openGraph: { title: post.title, description: post.summary, type: "article" },
+    alternates: {
+      canonical: url,
+    },
+    openGraph: {
+      title: post.title,
+      description: post.summary,
+      url,
+      type: "article",
+      ...(post.published_at && { publishedTime: post.published_at }),
+      modifiedTime: post.updated_at,
+      ...(imageUrl && { images: [{ url: imageUrl, width: 1200, height: 630, alt: post.title }] }),
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.summary,
+      ...(imageUrl && { images: [imageUrl] }),
+    },
   };
 }

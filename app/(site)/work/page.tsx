@@ -6,13 +6,37 @@ import { ProjectCard } from "@/components/site/ProjectCard";
 import { H1b, Body18, Label } from "@/components/ui/typography";
 import { RevealBlock } from "@/components/ui/RevealBlock";
 
-export const metadata: Metadata = {
-  title: "Work",
-  description:
-    "A showcase of Ayodele John's latest projects, highlighting thoughtful engineering, clear systems, and real-world results.",
-};
-
 const PAGE_SIZE = 6;
+
+const title = "Work";
+const description =
+  "A showcase of Ayodele John's latest projects, highlighting thoughtful engineering, clear systems, and real-world results.";
+
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>;
+}): Promise<Metadata> {
+  const { page: pageParam } = await searchParams;
+  const page = Math.max(1, Number(pageParam) || 1);
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: page > 1 ? `/work?page=${page}` : "/work",
+    },
+    openGraph: {
+      title: `${title} — Ayodele John`,
+      description,
+      url: "/work",
+      type: "website",
+    },
+    // Paginated pages are thin/duplicate variants of page 1 — keep them
+    // crawlable via links but out of the index.
+    ...(page > 1 && { robots: { index: false, follow: true } }),
+  };
+}
 
 export default async function WorkPage({
   searchParams,
