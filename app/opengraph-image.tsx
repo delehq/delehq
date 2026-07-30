@@ -17,16 +17,26 @@ export default async function OpengraphImage() {
           height: "100%",
           display: "flex",
           flexDirection: "column",
+          alignItems: "center",
           justifyContent: "center",
-          padding: "80px",
           background: "#111111",
           color: "#FAF7F3",
         }}
       >
-        <div style={{ fontSize: 28, letterSpacing: 4, color: "rgba(250,247,243,0.6)" }}>
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="#FAF7F3">
+          <path d="M13 0 2 14h7l-2 10L22 8h-8l-1-8Z" />
+        </svg>
+        <div
+          style={{
+            fontSize: 28,
+            letterSpacing: 4,
+            marginTop: 32,
+            color: "rgba(250,247,243,0.6)",
+          }}
+        >
           {tagline}
         </div>
-        <div style={{ fontSize: 84, fontWeight: 700, marginTop: 24, display: "flex" }}>
+        <div style={{ fontSize: 84, fontWeight: 700, marginTop: 16, display: "flex" }}>
           {fullName}
         </div>
       </div>
