@@ -32,7 +32,7 @@ export function Navbar({
       transition={SPRING_NAVBAR}
       className="fixed top-[30px] left-1/2 z-50 -translate-x-1/2"
     >
-      <div className="flex items-center gap-1 rounded-full bg-black p-1.5 text-cream shadow-lg">
+      <div className="relative flex items-center gap-1 rounded-full bg-black p-1.5 text-cream shadow-lg">
         <Link
           href="/"
           className="whitespace-nowrap rounded-full px-4 py-2 text-[14px] font-medium"
@@ -43,17 +43,17 @@ export function Navbar({
         <AnimatePresence initial={false}>
           {open && (
             <motion.div
-              initial={{ width: 0, opacity: 0 }}
-              animate={{ width: "auto", opacity: 1 }}
-              exit={{ width: 0, opacity: 0 }}
-              transition={{ type: "spring", duration: 0.4, bounce: 0.1 }}
-              className="flex items-center gap-1 overflow-hidden"
+              initial={{ opacity: 0, scale: 0.95, y: -4 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: -4 }}
+              transition={{ type: "spring", duration: 0.35, bounce: 0.15 }}
+              className="absolute top-[calc(100%+8px)] left-1/2 flex w-max max-w-[calc(100vw-32px)] min-w-[180px] -translate-x-1/2 flex-col items-stretch gap-2 rounded-2xl bg-black p-1.5 sm:static sm:left-auto sm:top-auto sm:w-auto sm:max-w-none sm:min-w-0 sm:translate-x-0 sm:flex-row sm:items-center sm:gap-1 sm:overflow-hidden sm:rounded-full sm:p-0"
             >
               {links.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="whitespace-nowrap rounded-full px-4 py-2 text-[14px] font-medium text-cream/70 transition-colors hover:text-cream"
+                  className="whitespace-nowrap rounded-full px-4 py-3 text-center text-[14px] font-medium text-cream/70 transition-colors hover:bg-cream/10 hover:text-cream sm:py-2 sm:text-left sm:hover:bg-transparent"
                   onClick={() => setOpen(false)}
                 >
                   {link.label}
