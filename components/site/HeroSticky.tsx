@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useSyncExternalStore } from "react";
 import type { SVGProps } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -38,14 +38,15 @@ export function HeroSticky({ headshotUrl, fullName, tagline, bio }: HeroStickyPr
   // hero title in the first place (unlike tablet/desktop, where a much
   // bigger box needs the grow-from-small treatment below) — so on phone it
   // just starts at its real size.
-  const [isPhone, setIsPhone] = useState(false);
-  useEffect(() => {
-    const mq = window.matchMedia("(max-width: 809px)");
-    setIsPhone(mq.matches);
-    const handler = (e: MediaQueryListEvent) => setIsPhone(e.matches);
-    mq.addEventListener("change", handler);
-    return () => mq.removeEventListener("change", handler);
-  }, []);
+  const isPhone = useSyncExternalStore(
+    (onChange) => {
+      const mq = window.matchMedia("(max-width: 809px)");
+      mq.addEventListener("change", onChange);
+      return () => mq.removeEventListener("change", onChange);
+    },
+    () => window.matchMedia("(max-width: 809px)").matches,
+    () => false, // server snapshot — matches the pre-hydration default
+  );
 
   // Starts small so it can't collide with the centered hero title at scroll
   // 0, grows to its actual (CSS-declared) size — timed to finish only once
