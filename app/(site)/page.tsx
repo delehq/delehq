@@ -16,7 +16,6 @@ import { H2, Body18 } from "@/components/ui/typography";
 import { TextArrowButton } from "@/components/ui/TextArrowButton";
 import { RevealBlock } from "@/components/ui/RevealBlock";
 import { SPRING_LIST, listStagger } from "@/lib/motion/presets";
-import { SITE_URL } from "@/lib/constants";
 
 export default async function HomePage() {
   const [profile, services, projects, testimonials, posts] = await Promise.all([
@@ -32,25 +31,8 @@ export default async function HomePage() {
     (s) => s.url && s.url !== "#",
   );
 
-  const personJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    name: profile?.full_name ?? "Ayodele John",
-    jobTitle: profile?.tagline ?? "Software Engineer",
-    url: SITE_URL,
-    ...(headshotUrl && { image: headshotUrl }),
-    ...(profile?.location && { address: profile.location }),
-    ...(profile?.contact_email && { email: profile.contact_email }),
-    ...(socialLinks.length > 0 && { sameAs: socialLinks.map((s) => s.url) }),
-  };
-
   return (
     <>
-      <script
-        type="application/ld+json"
-        // eslint-disable-next-line react/no-danger
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
-      />
       <HeroSticky
         headshotUrl={headshotUrl}
         fullName={profile?.full_name ?? "Ayodele John"}
