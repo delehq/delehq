@@ -139,7 +139,7 @@ const jsonLd = {
       sameAs: [
         "https://www.linkedin.com/in/john-ayodele-dev/",
         "https://github.com/delehq",
-        "https://twitter.com/jcode_Code",
+        "https://x.com/dele_dev",
         "https://www.instagram.com/jirovahq",
       ],
       makesOffer: [

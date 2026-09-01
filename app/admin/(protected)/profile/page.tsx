@@ -41,9 +41,8 @@ export default async function AdminProfilePage() {
       />
       <TextField
         name="footer_headline"
-        label="Footer headline"
+        label="Footer headline (optional — falls back to the default if left blank)"
         defaultValue={profile?.footer_headline ?? ""}
-        required
       />
       <TextField name="location" label="Location" defaultValue={profile?.location ?? ""} />
       <TextField

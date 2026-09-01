@@ -23,7 +23,7 @@ export async function updateProfile(formData: FormData) {
     bio: String(formData.get("bio") ?? "").trim(),
     headshot_path: (formData.get("headshot_path") as string) || null,
     resume_path: (formData.get("resume_path") as string) || null,
-    footer_headline: String(formData.get("footer_headline") ?? "").trim(),
+    footer_headline: String(formData.get("footer_headline") ?? "").trim() || null,
     location: (formData.get("location") as string) || null,
     contact_email: (formData.get("contact_email") as string) || null,
     social_links: socialLinks,

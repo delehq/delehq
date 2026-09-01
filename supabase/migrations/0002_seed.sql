@@ -18,11 +18,12 @@ values (
   'SOFTWARE ENGINEER',
   E'I''m Ayodele, a software engineer based in Nigeria, building production-grade backend systems and full-stack products end-to-end.\n\nI work across NestJS and TypeScript backends, PostgreSQL/MongoDB data layers, and React, Next.js, and React Native interfaces.\n\nOver the past few years I''ve shipped fintech systems handling multi-currency payments and payouts, and led UI/UX direction for client-facing platforms.',
   'Lagos, Nigeria',
-  'john.ayo.jam@gmail.com',
+  'johnayodelemiracle@gmail.com',
   '[
-    {"platform": "x", "url": "https://x.com/jcode_Code"},
+    {"platform": "x", "url": "https://x.com/dele_dev"},
     {"platform": "instagram", "url": "https://www.instagram.com/jirovahq/"},
-    {"platform": "linkedin", "url": "https://www.linkedin.com/in/john-ayodele-dev/"}
+    {"platform": "linkedin", "url": "https://www.linkedin.com/in/john-ayodele-dev/"},
+    {"platform": "github", "url": "https://github.com/delehq"}
   ]'::jsonb,
   'Building Systems That Scale.'
 )

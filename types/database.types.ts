@@ -28,7 +28,7 @@ export interface Database {
           bio: string;
           headshot_path: string | null;
           resume_path: string | null;
-          footer_headline: string;
+          footer_headline: string | null;
           location: string | null;
           contact_email: string | null;
           social_links: SocialLink[];
