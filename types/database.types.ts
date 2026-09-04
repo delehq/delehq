@@ -214,6 +214,23 @@ export interface Database {
           Pick<Database["public"]["Tables"]["contact_submissions"]["Row"], "is_read">
         >;
       } & NoRelationships;
+      page_views: {
+        Row: {
+          id: number;
+          path: string;
+          country: string | null;
+          region: string | null;
+          city: string | null;
+          created_at: string;
+        };
+        Insert: {
+          path: string;
+          country?: string | null;
+          region?: string | null;
+          city?: string | null;
+        };
+        Update: never;
+      } & NoRelationships;
     };
     Views: Record<string, never>;
     Functions: Record<string, never>;
