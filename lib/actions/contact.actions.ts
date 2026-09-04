@@ -1,6 +1,8 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
+import { getProfile } from "@/lib/data/profile";
+import { sendContactNotification } from "@/lib/email";
 import { ContactFormSchema, type ContactFormState } from "@/lib/validation/contact";
 
 export async function submitContactForm(
@@ -29,6 +31,18 @@ export async function submitContactForm(
 
   if (error) {
     return { errors: { message: ["Something went wrong. Please try again."] } };
+  }
+
+  // Best-effort — a failed notification email should never fail the
+  // submission itself, which already saved successfully above.
+  try {
+    const profile = await getProfile();
+    const to = profile?.contact_email || process.env.GMAIL_USER;
+    if (to) {
+      await sendContactNotification({ to, ...validated.data });
+    }
+  } catch {
+    // Ignore — the submission is already saved regardless.
   }
 
   return { success: true };
