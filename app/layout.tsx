@@ -12,7 +12,7 @@ const archivo = Archivo({
 
 const title = "Ayodele John — Software Engineer";
 const description =
-  "Ayodele John is a software engineer building production-grade platforms end-to-end, from backend systems to the interfaces that ship them.";
+  "Backend & AI Engineer building scalable, production-grade platforms with Node.js, NestJS, Python, microservices, cloud infrastructure (AWS/Azure), and ML systems.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
