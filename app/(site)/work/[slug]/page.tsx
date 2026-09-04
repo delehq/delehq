@@ -87,8 +87,8 @@ export default async function ProjectDetailPage({ params }: PageProps) {
           )}
         </div>
 
-        <div className="relative mt-10 aspect-[16/10] w-full overflow-hidden rounded-3xl">
-          {imageUrl ? (
+        {(() => {
+          const cover = imageUrl ? (
             <Image
               src={imageUrl}
               alt={project.title}
@@ -99,8 +99,24 @@ export default async function ProjectDetailPage({ params }: PageProps) {
             />
           ) : (
             <GradientPlaceholder seed={project.title} label={project.category} />
-          )}
-        </div>
+          );
+
+          const className = "relative mt-10 block aspect-[16/10] w-full overflow-hidden rounded-3xl";
+
+          return project.project_url ? (
+            <a
+              href={project.project_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={className}
+              aria-label={`Open ${project.title} live site`}
+            >
+              {cover}
+            </a>
+          ) : (
+            <div className={className}>{cover}</div>
+          );
+        })()}
 
         {project.content && (
           <div className="mt-16 max-w-[780px]">
