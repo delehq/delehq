@@ -7,6 +7,13 @@ export async function submitContactForm(
   _prevState: ContactFormState,
   formData: FormData,
 ): Promise<ContactFormState> {
+  // Honeypot field (see components/site/ContactForm.tsx) — real visitors
+  // never see or fill it in, so any value here means a bot. Report success
+  // without writing anything, so the bot gets no signal to adapt to.
+  if (formData.get("company")) {
+    return { success: true };
+  }
+
   const validated = ContactFormSchema.safeParse({
     name: formData.get("name"),
     email: formData.get("email"),

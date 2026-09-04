@@ -21,6 +21,19 @@ export function ContactForm() {
 
   return (
     <form action={action} className="flex flex-col gap-5 rounded-2xl bg-black p-4">
+      {/* Honeypot: invisible to real visitors, but naive spam bots fill in
+          every field they find. Any value here means it's a bot — see
+          lib/actions/contact.actions.ts, which silently drops the submission
+          without erroring so the bot has no signal to adapt to. */}
+      <input
+        type="text"
+        name="company"
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden="true"
+        className="absolute h-0 w-0 opacity-0"
+        style={{ left: "-9999px" }}
+      />
       <Field
         id="name"
         name="name"
