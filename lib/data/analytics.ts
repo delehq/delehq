@@ -2,9 +2,9 @@ import { createClient } from "@/lib/supabase/server";
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 
-// page_views.country stores the raw ISO code Vercel's edge network sends
-// (e.g. "NG"), not a display name — this turns "NG" into "Nigeria" using the
-// browser/Node built-in, no dataset or dependency needed.
+// page_views.country stores a raw ISO code (e.g. "NG"), not a display name —
+// this turns "NG" into "Nigeria" using the browser/Node built-in, no dataset
+// or dependency needed.
 const countryNames = new Intl.DisplayNames(["en"], { type: "region" });
 function countryLabel(code: string) {
   if (code === "Unknown") return code;

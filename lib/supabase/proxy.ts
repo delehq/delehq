@@ -26,9 +26,9 @@ function shouldLogPageView(request: NextRequest) {
 // a flash of the admin shell to a logged-out visitor.
 //
 // It also logs a lightweight, privacy-conscious page view (path + coarse
-// location from Vercel's edge geolocation headers, never an IP address) for
-// /admin/analytics — done via event.waitUntil so it never adds latency to
-// the actual page response.
+// location) for /admin/analytics — done via event.waitUntil so it never adds
+// latency to the actual page response. The IP address itself is used only
+// in-memory to resolve that location and is never written to the database.
 export async function updateSession(request: NextRequest, event: NextFetchEvent) {
   let supabaseResponse = NextResponse.next({ request });
 
@@ -77,11 +77,12 @@ export async function updateSession(request: NextRequest, event: NextFetchEvent)
     event.waitUntil(
       (async () => {
         try {
+          const geo = await resolveVisitorGeo(request);
           await supabase.from("page_views").insert({
             path: pathname,
-            country: request.headers.get("x-vercel-ip-country"),
-            region: decodeVercelGeoHeader(request.headers.get("x-vercel-ip-country-region")),
-            city: decodeVercelGeoHeader(request.headers.get("x-vercel-ip-city")),
+            country: geo.country,
+            region: geo.region,
+            city: geo.city,
           });
         } catch {
           // Analytics logging must never surface as a request failure.
@@ -93,12 +94,34 @@ export async function updateSession(request: NextRequest, event: NextFetchEvent)
   return supabaseResponse;
 }
 
-// Vercel percent-encodes geo header values (e.g. "New York" -> "New%20York").
-function decodeVercelGeoHeader(value: string | null) {
-  if (!value) return value;
+type VisitorGeo = { country: string | null; region: string | null; city: string | null };
+
+// The domain is proxied through Cloudflare (for its bot/WAF protection) in
+// front of Vercel, so Vercel's own x-vercel-ip-* headers geolocate
+// Cloudflare's edge server, not the visitor. Cloudflare forwards the real
+// visitor IP in cf-connecting-ip on every plan (unlike its precomputed
+// city/region headers, which need Enterprise), so we resolve location from
+// that IP ourselves via a free lookup. The IP is only ever held in memory for
+// this one lookup — never logged, never written to page_views.
+async function resolveVisitorGeo(request: NextRequest): Promise<VisitorGeo> {
+  const fallbackCountry = request.headers.get("cf-ipcountry") ?? request.headers.get("x-vercel-ip-country");
+  const ip = request.headers.get("cf-connecting-ip");
+  if (!ip) return { country: fallbackCountry, region: null, city: null };
+
   try {
-    return decodeURIComponent(value);
+    const res = await fetch(`http://ip-api.com/json/${ip}?fields=status,countryCode,regionName,city`, {
+      signal: AbortSignal.timeout(2000),
+    });
+    if (!res.ok) return { country: fallbackCountry, region: null, city: null };
+    const data = await res.json();
+    if (data.status !== "success") return { country: fallbackCountry, region: null, city: null };
+    return {
+      country: data.countryCode ?? fallbackCountry,
+      region: data.regionName ?? null,
+      city: data.city ?? null,
+    };
   } catch {
-    return value;
+    // ip-api down, rate-limited, or timed out — degrade to country only.
+    return { country: fallbackCountry, region: null, city: null };
   }
 }

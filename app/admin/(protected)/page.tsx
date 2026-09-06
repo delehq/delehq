@@ -31,8 +31,9 @@ export default async function AdminDashboard() {
       <div>
         <h2 className="mb-3 text-[16px] font-semibold">Site visits</h2>
         <p className="mb-4 text-[13px] text-black/50">
-          Tracked by page view (not by visitor), with a coarse country/city from your
-          host&apos;s edge network. No IP addresses or cookies are recorded.
+          Tracked by page view (not by visitor), with a coarse country/city resolved
+          from each request&apos;s IP via a lookup service. The IP itself is never
+          stored — no IP addresses or cookies are recorded.
         </p>
         <div className="grid grid-cols-1 gap-4 tablet:grid-cols-3">
           <StatCard label="All-time views" value={analytics.total} />
