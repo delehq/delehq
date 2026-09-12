@@ -36,6 +36,9 @@ export const metadata: Metadata = {
   category: "technology",
   alternates: {
     canonical: "/",
+    types: {
+      "application/rss+xml": [{ url: "/rss.xml", title: "Ayodele John — Blog" }],
+    },
   },
   openGraph: {
     type: "website",

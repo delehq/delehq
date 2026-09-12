@@ -19,6 +19,7 @@ type BlogDefaults = {
   body: string;
   cover_image_path: string | null;
   read_time_minutes: number | null;
+  category: string | null;
   faqs: Faq[] | null;
   published_at: string | null;
   is_published: boolean;
@@ -57,6 +58,11 @@ export function BlogForm({
             onChange={(e) => setTitle(e.target.value)}
           />
           <TextField name="slug" label="Slug" defaultValue={defaults?.slug} required />
+          <TextField
+            name="category"
+            label={'Category (optional — a short label like "Fintech Systems")'}
+            defaultValue={defaults?.category ?? ""}
+          />
           <TextAreaField
             name="summary"
             label="Summary (card description)"

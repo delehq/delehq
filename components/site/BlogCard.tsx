@@ -11,6 +11,7 @@ type Post = {
   cover_image_path: string | null;
   published_at: string | null;
   read_time_minutes?: number | null;
+  category?: string | null;
 };
 
 export function BlogCard({ post }: { post: Post }) {
@@ -42,6 +43,9 @@ export function BlogCard({ post }: { post: Post }) {
         )}
       </div>
       <div className="flex flex-col gap-1">
+        {post.category && (
+          <Body16 className="text-black/40 uppercase tracking-wide">{post.category}</Body16>
+        )}
         {(date || post.read_time_minutes) && (
           <div className="flex items-center gap-2 text-black/40">
             {date && <Body16 className="text-black/40">{date}</Body16>}

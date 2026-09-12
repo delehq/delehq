@@ -163,6 +163,7 @@ export interface Database {
           body: string;
           cover_image_path: string | null;
           read_time_minutes: number | null;
+          category: string | null;
           faqs: { question: string; answer: string }[] | null;
           published_at: string | null;
           is_published: boolean;

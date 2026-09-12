@@ -4,6 +4,8 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { insertRow, updateRow, deleteRow } from "@/lib/admin/crud-helpers";
 import { parseFaqsText } from "@/lib/faq";
+import { pingIndexNow } from "@/lib/indexnow";
+import { SITE_URL } from "@/lib/constants";
 
 function parse(formData: FormData) {
   const isPublished = formData.get("is_published") === "on";
@@ -19,6 +21,7 @@ function parse(formData: FormData) {
     read_time_minutes: formData.get("read_time_minutes")
       ? Number(formData.get("read_time_minutes"))
       : null,
+    category: (formData.get("category") as string)?.trim() || null,
     faqs: faqs.length > 0 ? faqs : null,
     is_published: isPublished,
     // First time a post is published, stamp published_at with now(); once
@@ -28,18 +31,26 @@ function parse(formData: FormData) {
 }
 
 export async function createBlogPost(formData: FormData) {
-  await insertRow("blog_posts", parse(formData));
+  const data = parse(formData);
+  await insertRow("blog_posts", data);
   revalidatePath("/admin/blog");
   revalidatePath("/blog");
   revalidatePath("/");
+  revalidatePath("/rss.xml");
+  // Best-effort nudge to Bing (and other IndexNow participants) to recrawl
+  // this URL now instead of waiting for their next scheduled pass.
+  if (data.is_published) void pingIndexNow(`${SITE_URL}/blog/${data.slug}`);
   redirect("/admin/blog");
 }
 
 export async function updateBlogPost(id: string, formData: FormData) {
-  await updateRow("blog_posts", id, parse(formData));
+  const data = parse(formData);
+  await updateRow("blog_posts", id, data);
   revalidatePath("/admin/blog");
   revalidatePath("/blog");
   revalidatePath("/");
+  revalidatePath("/rss.xml");
+  if (data.is_published) void pingIndexNow(`${SITE_URL}/blog/${data.slug}`);
   redirect("/admin/blog");
 }
 

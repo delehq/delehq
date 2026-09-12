@@ -1,5 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
 import { z } from "zod";
+import { pingIndexNow } from "@/lib/indexnow";
+import { SITE_URL } from "@/lib/constants";
 
 // Lets the scheduled blog-post cloud routine (see the "Write one blog post
 // for deledev.com" routine) publish directly instead of a human copy-pasting
@@ -115,6 +117,7 @@ export async function POST(request: Request) {
       .from("blog_posts")
       .insert({ ...row, slug: fallbackSlug }));
     if (!insertError) {
+      void pingIndexNow(`${SITE_URL}/blog/${fallbackSlug}`);
       return Response.json({ success: true, slug: fallbackSlug, note: "original slug was taken" });
     }
   }
@@ -123,5 +126,6 @@ export async function POST(request: Request) {
     return Response.json({ error: insertError.message }, { status: 500 });
   }
 
+  void pingIndexNow(`${SITE_URL}/blog/${slug}`);
   return Response.json({ success: true, slug });
 }

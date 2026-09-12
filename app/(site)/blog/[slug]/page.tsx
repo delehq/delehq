@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Image from "next/image";
+import Link from "next/link";
 import { getPostBySlug, getRelatedPosts } from "@/lib/data/blog";
 import { getProfile } from "@/lib/data/profile";
 import { getMediaUrl } from "@/lib/supabase/storage";
@@ -23,6 +24,7 @@ export default async function BlogDetailPage({ params }: PageProps) {
     getProfile(),
   ]);
   const imageUrl = getMediaUrl(post.cover_image_path);
+  const authorHeadshotUrl = getMediaUrl(profile?.headshot_path);
   const date = post.published_at
     ? new Date(post.published_at).toLocaleDateString("en-US", {
         month: "long",
@@ -40,7 +42,12 @@ export default async function BlogDetailPage({ params }: PageProps) {
     ...(post.published_at && { datePublished: post.published_at }),
     dateModified: post.updated_at,
     ...(imageUrl && { image: imageUrl }),
-    author: { "@type": "Person", name: profile?.full_name ?? "Ayodele John" },
+    ...(post.category && { articleSection: post.category }),
+    author: {
+      "@type": "Person",
+      name: profile?.full_name ?? "Ayodele John",
+      url: `${SITE_URL}/about`,
+    },
   };
 
   const breadcrumbJsonLd = {
@@ -85,6 +92,9 @@ export default async function BlogDetailPage({ params }: PageProps) {
       <section className="mx-auto max-w-[1080px] px-5 pt-[160px] pb-20 tablet:px-10 desktop:px-5">
         <div className="flex flex-col gap-10 desktop:flex-row desktop:items-start">
           <div className="min-w-0 flex-1">
+            {post.category && (
+              <Label className="mb-3 block text-black/50">/{post.category}</Label>
+            )}
             <H1b reveal className="max-w-[800px] text-balance">
               {post.title}
             </H1b>
@@ -104,6 +114,31 @@ export default async function BlogDetailPage({ params }: PageProps) {
             >
               {post.summary}
             </Body18>
+
+            <Link
+              href="/about"
+              className="mt-6 flex w-fit items-center gap-3 rounded-full border border-black/10 py-1.5 pr-4 pl-1.5 transition-colors hover:border-black/25"
+            >
+              <span className="relative h-9 w-9 shrink-0 overflow-hidden rounded-full bg-black/5">
+                {authorHeadshotUrl ? (
+                  <Image
+                    src={authorHeadshotUrl}
+                    alt={profile?.full_name ?? "Ayodele John"}
+                    fill
+                    sizes="36px"
+                    className="object-cover"
+                  />
+                ) : null}
+              </span>
+              <span className="flex flex-col">
+                <span className="text-[13px] font-medium text-black">
+                  {profile?.full_name ?? "Ayodele John"}
+                </span>
+                <span className="text-[12px] text-black/50">
+                  {profile?.tagline ?? "Software Engineer"}
+                </span>
+              </span>
+            </Link>
 
             <div className="relative mt-10 aspect-[16/9] w-full overflow-hidden rounded-3xl">
               {imageUrl ? (
