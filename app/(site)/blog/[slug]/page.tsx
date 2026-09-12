@@ -8,7 +8,7 @@ import { GradientPlaceholder } from "@/components/site/GradientPlaceholder";
 import { BlogCard } from "@/components/site/BlogCard";
 import { BlogSidebar } from "@/components/site/BlogSidebar";
 import { MarkdownContent } from "@/components/site/MarkdownContent";
-import { H1b, Body16, Body18, Label } from "@/components/ui/typography";
+import { H1b, H5, Body16, Body18, Label } from "@/components/ui/typography";
 import { SITE_URL } from "@/lib/constants";
 
 type PageProps = { params: Promise<{ slug: string }> };
@@ -52,6 +52,17 @@ export default async function BlogDetailPage({ params }: PageProps) {
     ],
   };
 
+  const faqs = post.faqs ?? [];
+  const faqJsonLd = faqs.length > 0 && {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  };
+
   return (
     <>
       <script
@@ -64,6 +75,13 @@ export default async function BlogDetailPage({ params }: PageProps) {
         // eslint-disable-next-line react/no-danger
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
+      {faqJsonLd && (
+        <script
+          type="application/ld+json"
+          // eslint-disable-next-line react/no-danger
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        />
+      )}
       <section className="mx-auto max-w-[1080px] px-5 pt-[160px] pb-20 tablet:px-10 desktop:px-5">
         <div className="flex flex-col gap-10 desktop:flex-row desktop:items-start">
           <div className="min-w-0 flex-1">
@@ -105,6 +123,20 @@ export default async function BlogDetailPage({ params }: PageProps) {
             <div className="mt-16">
               <MarkdownContent content={post.body} />
             </div>
+
+            {faqs.length > 0 && (
+              <div className="mt-16 border-t border-black/10 pt-10">
+                <Label className="mb-6 block">/Frequently Asked Questions</Label>
+                <div className="flex flex-col gap-6">
+                  {faqs.map((faq) => (
+                    <div key={faq.question}>
+                      <H5 as="h3">{faq.question}</H5>
+                      <Body16 className="mt-2 text-black/60">{faq.answer}</Body16>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
 
           <BlogSidebar contactEmail={profile?.contact_email ?? null} />

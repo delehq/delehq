@@ -3,10 +3,12 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { insertRow, updateRow, deleteRow } from "@/lib/admin/crud-helpers";
+import { parseFaqsText } from "@/lib/faq";
 
 function parse(formData: FormData) {
   const isPublished = formData.get("is_published") === "on";
   const existingPublishedAt = (formData.get("published_at") as string) || null;
+  const faqs = parseFaqsText(String(formData.get("faqs") ?? ""));
 
   return {
     slug: String(formData.get("slug") ?? "").trim(),
@@ -17,6 +19,7 @@ function parse(formData: FormData) {
     read_time_minutes: formData.get("read_time_minutes")
       ? Number(formData.get("read_time_minutes"))
       : null,
+    faqs: faqs.length > 0 ? faqs : null,
     is_published: isPublished,
     // First time a post is published, stamp published_at with now(); once
     // set, keep it stable across later edits (including unpublishing).

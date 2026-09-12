@@ -10,6 +10,7 @@ import { DeleteForm } from "@/components/admin/DeleteForm";
 import { MarkdownContent } from "@/components/site/MarkdownContent";
 import { GradientPlaceholder } from "@/components/site/GradientPlaceholder";
 import { getMediaUrl } from "@/lib/supabase/storage";
+import { faqsToText, type Faq } from "@/lib/faq";
 
 type BlogDefaults = {
   title: string;
@@ -18,6 +19,7 @@ type BlogDefaults = {
   body: string;
   cover_image_path: string | null;
   read_time_minutes: number | null;
+  faqs: Faq[] | null;
   published_at: string | null;
   is_published: boolean;
 };
@@ -83,6 +85,13 @@ export function BlogForm({
             label="Read time (minutes)"
             type="number"
             defaultValue={defaults?.read_time_minutes ?? ""}
+          />
+          <TextAreaField
+            name="faqs"
+            label="FAQs (optional — shown as a FAQ section on the post, and helps it get quoted by AI answer engines)"
+            rows={8}
+            defaultValue={faqsToText(defaults?.faqs)}
+            placeholder={"Q: Question, phrased the way someone would actually ask it?\nA: A plain, direct answer.\n\nQ: Second question?\nA: Second answer."}
           />
           <input type="hidden" name="published_at" defaultValue={defaults?.published_at ?? ""} />
           <CheckboxField
