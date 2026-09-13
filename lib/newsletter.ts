@@ -29,3 +29,23 @@ export async function subscribeToNewsletter(email: string): Promise<SubscribeRes
 
   return { success: false, error: "Something went wrong. Please try again." };
 }
+
+// Subscriber count for the admin dashboard. Buttondown tracks unsubscribes
+// separately (a distinct /v1/unsubscribers list), so this count already
+// reflects the active list. Best-effort — returns null rather than throwing,
+// since a dashboard stat should never break the page it's on.
+export async function getSubscriberCount(): Promise<number | null> {
+  const apiKey = process.env.BUTTONDOWN_API_KEY;
+  if (!apiKey) return null;
+
+  try {
+    const res = await fetch("https://api.buttondown.email/v1/subscribers?limit=1", {
+      headers: { Authorization: `Token ${apiKey}` },
+    });
+    if (!res.ok) return null;
+    const data = (await res.json()) as { count?: number };
+    return data.count ?? null;
+  } catch {
+    return null;
+  }
+}

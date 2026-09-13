@@ -224,6 +224,7 @@ export interface Database {
           country: string | null;
           region: string | null;
           city: string | null;
+          referrer_host: string | null;
           created_at: string;
         };
         Insert: {
@@ -231,6 +232,7 @@ export interface Database {
           country?: string | null;
           region?: string | null;
           city?: string | null;
+          referrer_host?: string | null;
         };
         Update: never;
       } & NoRelationships;

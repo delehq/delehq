@@ -87,7 +87,10 @@ export async function updateSession(request: NextRequest, event: NextFetchEvent)
           // fake it with a wrong or third-party-sourced value.
           const country =
             request.headers.get("cf-ipcountry") ?? request.headers.get("x-vercel-ip-country");
-          await supabase.from("page_views").insert({ path: pathname, country, region: null, city: null });
+          const referrerHost = getReferrerHost(request.headers.get("referer"));
+          await supabase
+            .from("page_views")
+            .insert({ path: pathname, country, region: null, city: null, referrer_host: referrerHost });
         } catch {
           // Analytics logging must never surface as a request failure.
         }
@@ -96,4 +99,16 @@ export async function updateSession(request: NextRequest, event: NextFetchEvent)
   }
 
   return supabaseResponse;
+}
+
+// Only the hostname is kept (e.g. "chatgpt.com"), never the full referrer
+// URL — that can carry the referring page's own path/query string, which
+// isn't something this site needs to store about someone else's page.
+function getReferrerHost(referer: string | null): string | null {
+  if (!referer) return null;
+  try {
+    return new URL(referer).hostname;
+  } catch {
+    return null;
+  }
 }
