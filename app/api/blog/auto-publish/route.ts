@@ -1,7 +1,33 @@
 import { createClient } from "@supabase/supabase-js";
 import { z } from "zod";
 import { pingIndexNow } from "@/lib/indexnow";
+import { requestGoogleIndexing } from "@/lib/google-indexing";
+import { crossPostToDevTo } from "@/lib/devto";
+import { getMediaUrl } from "@/lib/supabase/storage";
 import { SITE_URL } from "@/lib/constants";
+
+// Best-effort: ping IndexNow and cross-post to dev.to. Never lets either
+// failure surface as an error on a publish that already succeeded.
+async function afterPublish(slug: string, title: string, body: string, coverImagePath: string | null) {
+  const url = `${SITE_URL}/blog/${slug}`;
+  void pingIndexNow(url);
+  void requestGoogleIndexing(url);
+
+  try {
+    const devtoUrl = await crossPostToDevTo({
+      title,
+      bodyMarkdown: body,
+      canonicalUrl: url,
+      coverImageUrl: getMediaUrl(coverImagePath),
+      tags: ["programming", "softwareengineering"],
+    });
+    if (devtoUrl) {
+      await supabaseAdmin().from("blog_posts").update({ devto_url: devtoUrl }).eq("slug", slug);
+    }
+  } catch {
+    // Ignore — cross-posting is a nice-to-have, not a requirement.
+  }
+}
 
 // Lets the scheduled blog-post cloud routine (see the "Write one blog post
 // for deledev.com" routine) publish directly instead of a human copy-pasting
@@ -117,7 +143,7 @@ export async function POST(request: Request) {
       .from("blog_posts")
       .insert({ ...row, slug: fallbackSlug }));
     if (!insertError) {
-      void pingIndexNow(`${SITE_URL}/blog/${fallbackSlug}`);
+      await afterPublish(fallbackSlug, title, body, coverImagePath);
       return Response.json({ success: true, slug: fallbackSlug, note: "original slug was taken" });
     }
   }
@@ -126,6 +152,6 @@ export async function POST(request: Request) {
     return Response.json({ error: insertError.message }, { status: 500 });
   }
 
-  void pingIndexNow(`${SITE_URL}/blog/${slug}`);
+  await afterPublish(slug, title, body, coverImagePath);
   return Response.json({ success: true, slug });
 }

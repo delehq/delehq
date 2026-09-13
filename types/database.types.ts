@@ -165,6 +165,7 @@ export interface Database {
           read_time_minutes: number | null;
           category: string | null;
           faqs: { question: string; answer: string }[] | null;
+          devto_url: string | null;
           published_at: string | null;
           is_published: boolean;
           created_at: string;
