@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { getPublishedPosts } from "@/lib/data/blog";
 import { BlogCard } from "@/components/site/BlogCard";
+import { NewsletterForm } from "@/components/site/NewsletterForm";
 import { H1b, Body18 } from "@/components/ui/typography";
 import { RevealBlock } from "@/components/ui/RevealBlock";
 
@@ -47,6 +48,10 @@ export default async function BlogPage() {
       ) : (
         <p className="mt-16 text-black/40">No posts yet — check back soon.</p>
       )}
+
+      <div className="mt-16 max-w-[560px]">
+        <NewsletterForm />
+      </div>
     </section>
   );
 }

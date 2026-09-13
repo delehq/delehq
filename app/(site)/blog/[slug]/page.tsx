@@ -8,6 +8,7 @@ import { getMediaUrl } from "@/lib/supabase/storage";
 import { GradientPlaceholder } from "@/components/site/GradientPlaceholder";
 import { BlogCard } from "@/components/site/BlogCard";
 import { BlogSidebar } from "@/components/site/BlogSidebar";
+import { NewsletterForm } from "@/components/site/NewsletterForm";
 import { MarkdownContent } from "@/components/site/MarkdownContent";
 import { H1b, H5, Body16, Body18, Label } from "@/components/ui/typography";
 import { SITE_URL } from "@/lib/constants";
@@ -172,6 +173,10 @@ export default async function BlogDetailPage({ params }: PageProps) {
                 </div>
               </div>
             )}
+
+            <div className="mt-16">
+              <NewsletterForm />
+            </div>
           </div>
 
           <BlogSidebar contactEmail={profile?.contact_email ?? null} />
