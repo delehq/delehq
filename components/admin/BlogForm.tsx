@@ -22,6 +22,7 @@ type BlogDefaults = {
   category: string | null;
   faqs: Faq[] | null;
   devto_url: string | null;
+  coderlegion_url: string | null;
   published_at: string | null;
   is_published: boolean;
 };
@@ -101,17 +102,29 @@ export function BlogForm({
             placeholder={"Q: Question, phrased the way someone would actually ask it?\nA: A plain, direct answer.\n\nQ: Second question?\nA: Second answer."}
           />
           <input type="hidden" name="published_at" defaultValue={defaults?.published_at ?? ""} />
-          {defaults?.devto_url && (
+          {(defaults?.devto_url || defaults?.coderlegion_url) && (
             <p className="text-[13px] text-black/50">
               Cross-posted to{" "}
-              <a
-                href={defaults.devto_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="underline underline-offset-2"
-              >
-                dev.to
-              </a>
+              {[
+                defaults?.devto_url && { label: "dev.to", url: defaults.devto_url },
+                defaults?.coderlegion_url && { label: "CoderLegion", url: defaults.coderlegion_url },
+              ]
+                .filter(Boolean)
+                .map((link, i, arr) =>
+                  link ? (
+                    <span key={link.url}>
+                      <a
+                        href={link.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="underline underline-offset-2"
+                      >
+                        {link.label}
+                      </a>
+                      {i < arr.length - 1 && " and "}
+                    </span>
+                  ) : null,
+                )}
             </p>
           )}
           <CheckboxField

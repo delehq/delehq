@@ -3,29 +3,49 @@ import { z } from "zod";
 import { pingIndexNow } from "@/lib/indexnow";
 import { requestGoogleIndexing } from "@/lib/google-indexing";
 import { crossPostToDevTo } from "@/lib/devto";
+import { crossPostToCoderLegion } from "@/lib/coderlegion";
 import { getMediaUrl } from "@/lib/supabase/storage";
 import { SITE_URL } from "@/lib/constants";
 
-// Best-effort: ping IndexNow and cross-post to dev.to. Never lets either
-// failure surface as an error on a publish that already succeeded.
+// Best-effort: ping IndexNow/Google, and cross-post to dev.to + CoderLegion.
+// Never lets any one failure surface as an error on a publish that already
+// succeeded, or block the others from still being attempted.
 async function afterPublish(slug: string, title: string, body: string, coverImagePath: string | null) {
   const url = `${SITE_URL}/blog/${slug}`;
   void pingIndexNow(url);
   void requestGoogleIndexing(url);
+
+  const coverImageUrl = getMediaUrl(coverImagePath);
+  const tags = ["programming", "softwareengineering"];
 
   try {
     const devtoUrl = await crossPostToDevTo({
       title,
       bodyMarkdown: body,
       canonicalUrl: url,
-      coverImageUrl: getMediaUrl(coverImagePath),
-      tags: ["programming", "softwareengineering"],
+      coverImageUrl,
+      tags,
     });
     if (devtoUrl) {
       await supabaseAdmin().from("blog_posts").update({ devto_url: devtoUrl }).eq("slug", slug);
     }
   } catch {
     // Ignore — cross-posting is a nice-to-have, not a requirement.
+  }
+
+  try {
+    const coderlegionUrl = await crossPostToCoderLegion({
+      title,
+      bodyMarkdown: body,
+      canonicalUrl: url,
+      coverImageUrl,
+      tags,
+    });
+    if (coderlegionUrl) {
+      await supabaseAdmin().from("blog_posts").update({ coderlegion_url: coderlegionUrl }).eq("slug", slug);
+    }
+  } catch {
+    // Same as above.
   }
 }
 

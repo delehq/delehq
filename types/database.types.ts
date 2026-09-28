@@ -166,6 +166,7 @@ export interface Database {
           category: string | null;
           faqs: { question: string; answer: string }[] | null;
           devto_url: string | null;
+          coderlegion_url: string | null;
           published_at: string | null;
           is_published: boolean;
           created_at: string;

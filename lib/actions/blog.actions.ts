@@ -8,6 +8,7 @@ import { parseFaqsText } from "@/lib/faq";
 import { pingIndexNow } from "@/lib/indexnow";
 import { requestGoogleIndexing } from "@/lib/google-indexing";
 import { crossPostToDevTo } from "@/lib/devto";
+import { crossPostToCoderLegion } from "@/lib/coderlegion";
 import { getMediaUrl } from "@/lib/supabase/storage";
 import { SITE_URL } from "@/lib/constants";
 
@@ -46,32 +47,49 @@ async function afterPublish(slug: string, data: ReturnType<typeof parse>) {
   void pingIndexNow(url);
   void requestGoogleIndexing(url);
 
-  try {
-    const supabase = await createClient();
-    const { data: row } = await supabase
-      .from("blog_posts")
-      .select("devto_url")
-      .eq("slug", slug)
-      .maybeSingle();
-    if (row?.devto_url) return; // already cross-posted, never repost on edit
+  const supabase = await createClient();
+  const { data: row } = await supabase
+    .from("blog_posts")
+    .select("devto_url, coderlegion_url")
+    .eq("slug", slug)
+    .maybeSingle();
 
-    const coverImageUrl = getMediaUrl(data.cover_image_path);
-    const tags = ["programming", "softwareengineering", ...(data.category ? [] : ["beginners"])];
+  const coverImageUrl = getMediaUrl(data.cover_image_path);
+  const tags = ["programming", "softwareengineering", ...(data.category ? [] : ["beginners"])];
 
-    const devtoUrl = await crossPostToDevTo({
-      title: data.title,
-      bodyMarkdown: data.body,
-      canonicalUrl: url,
-      coverImageUrl,
-      tags,
-    });
-
-    if (devtoUrl) {
-      await supabase.from("blog_posts").update({ devto_url: devtoUrl }).eq("slug", slug);
+  if (!row?.devto_url) {
+    try {
+      const devtoUrl = await crossPostToDevTo({
+        title: data.title,
+        bodyMarkdown: data.body,
+        canonicalUrl: url,
+        coverImageUrl,
+        tags,
+      });
+      if (devtoUrl) {
+        await supabase.from("blog_posts").update({ devto_url: devtoUrl }).eq("slug", slug);
+      }
+    } catch {
+      // Cross-posting is a nice-to-have layered on top of a publish that
+      // already succeeded — never let it block or error the admin action.
     }
-  } catch {
-    // Cross-posting is a nice-to-have layered on top of a publish that
-    // already succeeded — never let it block or error the admin action.
+  }
+
+  if (!row?.coderlegion_url) {
+    try {
+      const coderlegionUrl = await crossPostToCoderLegion({
+        title: data.title,
+        bodyMarkdown: data.body,
+        canonicalUrl: url,
+        coverImageUrl,
+        tags,
+      });
+      if (coderlegionUrl) {
+        await supabase.from("blog_posts").update({ coderlegion_url: coderlegionUrl }).eq("slug", slug);
+      }
+    } catch {
+      // Same as above — never let this block or error the admin action.
+    }
   }
 }
 
