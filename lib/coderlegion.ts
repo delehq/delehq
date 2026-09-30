@@ -1,4 +1,5 @@
 import "server-only";
+import sharp from "sharp";
 
 const API_BASE = "https://coderlegion.com/api/v1";
 const ARTICLES_CATEGORY_ID = 2; // confirmed via GET /posts/create-options
@@ -11,20 +12,28 @@ function slugify(title: string): string {
     .replace(/^-+|-+$/g, "");
 }
 
-// CoderLegion's image upload has an undocumented size limit — a ~35KB test
-// image succeeded, a ~5.5MB real cover photo returned a bare 500. Rather
-// than guess the exact threshold, this returns null on any failure so the
-// post still gets created, just without a cover image, instead of failing
-// the whole cross-post over a nice-to-have.
+// CoderLegion's own docs cap "cover" images at 1080x1080 server-side, but a
+// ~5.5MB source photo (well under that pixel cap already) still got a bare
+// 500 on upload — so the real limit is file size, not dimensions, and it's
+// undocumented. Re-encoding through sharp at 1080px/quality 80 reliably
+// lands in the 100-300KB range, comfortably under whatever the cap is
+// (confirmed: a 35KB image uploads fine).
+async function compressForUpload(buffer: Buffer): Promise<Buffer> {
+  return sharp(buffer)
+    .resize(1080, 1080, { fit: "inside", withoutEnlargement: true })
+    .jpeg({ quality: 80 })
+    .toBuffer();
+}
+
 async function uploadCoverImage(imageUrl: string, apiKey: string): Promise<string | null> {
   try {
     const imgRes = await fetch(imageUrl);
     if (!imgRes.ok) return null;
-    const buffer = Buffer.from(await imgRes.arrayBuffer());
-    const contentType = imgRes.headers.get("content-type") ?? "image/jpeg";
+    const original = Buffer.from(await imgRes.arrayBuffer());
+    const compressed = await compressForUpload(original);
 
     const form = new FormData();
-    form.append("file", new Blob([buffer], { type: contentType }), "cover.jpg");
+    form.append("file", new Blob([new Uint8Array(compressed)], { type: "image/jpeg" }), "cover.jpg");
     form.append("type", "cover");
 
     const uploadRes = await fetch(`${API_BASE}/uploads/image`, {
@@ -32,6 +41,8 @@ async function uploadCoverImage(imageUrl: string, apiKey: string): Promise<strin
       headers: { "X-API-Key": apiKey },
       body: form,
     });
+    // Still don't let an upload failure kill the whole cross-post — post
+    // without a cover rather than not at all — but this should be rare now.
     if (!uploadRes.ok) return null;
 
     const data = (await uploadRes.json()) as { data?: { blobid?: string } };
