@@ -1,6 +1,5 @@
 -- Seed data drawn from Ayodele John's resume.
 -- Placeholders (marked below) should be filled in via /admin once the site is live:
---   - profile.contact_email: best-known address, confirm it's the one you want public
 --   - profile.resume_path: no CV uploaded yet — "Download CV" stays inert until you add one
 --   - projects.year: resume doesn't date individual projects; years below are estimates
 --   - projects.cover_image_path / project_url / repo_url: none uploaded yet, cards fall
@@ -18,7 +17,7 @@ values (
   'SOFTWARE ENGINEER',
   E'I''m Ayodele, a software engineer based in Nigeria, building production-grade backend systems and full-stack products end-to-end.\n\nI work across NestJS and TypeScript backends, PostgreSQL/MongoDB data layers, and React, Next.js, and React Native interfaces.\n\nOver the past few years I''ve shipped fintech systems handling multi-currency payments and payouts, and led UI/UX direction for client-facing platforms.',
   'Lagos, Nigeria',
-  'johnayodelemiracle@gmail.com',
+  'info@deledev.com',
   '[
     {"platform": "x", "url": "https://x.com/dele_dev"},
     {"platform": "instagram", "url": "https://www.instagram.com/jirovahq/"},

@@ -114,7 +114,7 @@ async function buildJsonLd() {
         description:
           "Nigeria-based software engineer building production-grade platforms end-to-end, from backend systems to the interfaces that ship them. Specializes in backend and API engineering, fintech and payments systems, cloud infrastructure, full-stack product delivery, and AI engineering.",
         jobTitle: "Lead Backend Engineer",
-        email: `mailto:${profile?.contact_email ?? "johnayodelemiracle@gmail.com"}`,
+        email: `mailto:${profile?.contact_email ?? "info@deledev.com"}`,
         ...(profile?.location && { address: profile.location }),
         nationality: { "@type": "Country", name: "Nigeria" },
         worksFor: { "@id": "https://sonaroid.io/#organization" },

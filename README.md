@@ -2,7 +2,7 @@
 
 Lead Backend Engineer at [Sonaroid](https://sonaroid.io/), based in Nigeria. I build production-grade platforms end-to-end — backend systems, fintech/payments infrastructure, cloud architecture, and the interfaces that ship them. Open to remote full-time roles and contract/consulting work.
 
-📍 Nigeria &nbsp;·&nbsp; 🌍 Open to remote, worldwide &nbsp;·&nbsp; ✉️ [johnayodelemiracle@gmail.com](mailto:johnayodelemiracle@gmail.com)
+📍 Nigeria &nbsp;·&nbsp; 🌍 Open to remote, worldwide &nbsp;·&nbsp; ✉️ [info@deledev.com](mailto:info@deledev.com)
 
 [![Portfolio](https://img.shields.io/badge/Portfolio-deledev.com-111111?style=flat-square)](https://www.deledev.com)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-john--ayodele--dev-0A66C2?style=flat-square&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/john-ayodele-dev/)
