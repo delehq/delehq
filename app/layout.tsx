@@ -12,7 +12,7 @@ const archivo = Archivo({
 
 const title = "Ayodele John — Software Engineer";
 const description =
-  "I'm John Ayodele, a Backend and AI Engineer building scalable, production-grade platforms with Node.js, NestJS, Python, microservices, and cloud infrastructure.";
+  "Ayodele John is a software engineer building frontend web apps, backend APIs, mobile apps, and cloud infrastructure for clients worldwide.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -24,11 +24,15 @@ export const metadata: Metadata = {
   keywords: [
     "Ayodele John",
     "software engineer",
+    "frontend engineer",
     "backend engineer",
+    "mobile app developer",
+    "React Native developer",
+    "cloud engineer",
+    "cloud infrastructure engineer",
     "full stack developer",
     "NestJS developer",
     "Next.js developer",
-    "Nigeria software engineer",
   ],
   authors: [{ name: "Ayodele John", url: SITE_URL }],
   creator: "Ayodele John",
@@ -112,11 +116,9 @@ async function buildJsonLd() {
         // this project.
         image: headshotUrl ?? `${SITE_URL}/opengraph-image`,
         description:
-          "Nigeria-based software engineer building production-grade platforms end-to-end, from backend systems to the interfaces that ship them. Specializes in backend and API engineering, fintech and payments systems, cloud infrastructure, full-stack product delivery, and AI engineering.",
-        jobTitle: "Lead Backend Engineer",
+          "Software engineer delivering frontend web applications, backend systems and APIs, mobile apps, and cloud server infrastructure. Works across React, Next.js, React Native, Node.js, NestJS, AWS, and Azure, with experience in fintech, payments, and AI integration.",
+        jobTitle: "Software Engineer",
         email: `mailto:${profile?.contact_email ?? "info@deledev.com"}`,
-        ...(profile?.location && { address: profile.location }),
-        nationality: { "@type": "Country", name: "Nigeria" },
         worksFor: { "@id": "https://sonaroid.io/#organization" },
         alumniOf: [
           { "@type": "CollegeOrUniversity", name: "University of Benin" },
@@ -143,7 +145,11 @@ async function buildJsonLd() {
           },
         ],
         knowsAbout: [
+          "Frontend Engineering",
           "Backend Engineering",
+          "Full-Stack Development",
+          "Mobile App Development",
+          "Cloud Server Engineering",
           "NestJS",
           "Node.js",
           "TypeScript",
@@ -167,6 +173,30 @@ async function buildJsonLd() {
         knowsLanguage: "en",
         sameAs: sameAs.length > 0 ? sameAs : FALLBACK_SAME_AS,
         makesOffer: [
+          {
+            "@type": "Offer",
+            itemOffered: {
+              "@type": "Service",
+              name: "Frontend Web Development",
+              serviceType: "Software Development",
+              description:
+                "Responsive web applications and interfaces built with React, Next.js, and TypeScript.",
+              provider: { "@id": "https://www.deledev.com/#person" },
+              areaServed: "Worldwide (Remote)",
+            },
+          },
+          {
+            "@type": "Offer",
+            itemOffered: {
+              "@type": "Service",
+              name: "Mobile App Development",
+              serviceType: "Software Development",
+              description:
+                "Cross-platform mobile applications built with React Native and integrated with backend APIs.",
+              provider: { "@id": "https://www.deledev.com/#person" },
+              areaServed: "Worldwide (Remote)",
+            },
+          },
           {
             "@type": "Offer",
             itemOffered: {
@@ -222,7 +252,7 @@ async function buildJsonLd() {
               name: "Cloud Infrastructure & DevOps",
               serviceType: "IT Consulting",
               description:
-                "AWS and Azure infrastructure, Docker, Kubernetes, and CI/CD pipeline design.",
+                "Cloud server engineering and deployment on AWS and Azure, Docker, Kubernetes, and CI/CD pipeline design.",
               provider: { "@id": "https://www.deledev.com/#person" },
               areaServed: "Worldwide (Remote)",
             },
@@ -244,7 +274,7 @@ async function buildJsonLd() {
         url: "https://www.deledev.com/",
         name: "Ayodele John — Software Engineer",
         description:
-          "Portfolio of Ayodele John, a Nigeria-based software engineer building production-grade platforms end-to-end.",
+          "Portfolio of Ayodele John, a software engineer working across frontend, backend, mobile app development, and cloud infrastructure.",
         inLanguage: "en",
         publisher: { "@id": "https://www.deledev.com/#person" },
       },

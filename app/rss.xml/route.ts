@@ -40,7 +40,7 @@ export async function GET() {
   <channel>
     <title>Ayodele John — Blog</title>
     <link>${SITE_URL}/blog</link>
-    <description>Writing on backend systems, fintech engineering, and product delivery.</description>
+    <description>Writing on frontend, backend, mobile development, cloud infrastructure, and product delivery.</description>
     <language>en</language>${items}
   </channel>
 </rss>`;

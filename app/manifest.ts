@@ -5,7 +5,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "Ayodele John — Software Engineer",
     short_name: "Ayodele John",
     description:
-      "Ayodele John is a software engineer building production-grade platforms end-to-end, from backend systems to the interfaces that ship them.",
+      "Ayodele John is a software engineer building frontend web apps, backend APIs, mobile apps, and cloud infrastructure.",
     start_url: "/",
     display: "standalone",
     background_color: "#faf7f3",

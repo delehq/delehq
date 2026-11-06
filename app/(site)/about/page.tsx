@@ -12,14 +12,14 @@ import { SPRING_LIST, listStagger } from "@/lib/motion/presets";
 export const metadata: Metadata = {
   title: "Resume",
   description:
-    "Ayodele John's work experience, education, certifications, and technical skills.",
+    "Explore Ayodele John's experience and skills in frontend, backend, mobile app development, and cloud engineering, plus education and certifications.",
   alternates: {
     canonical: "/about",
   },
   openGraph: {
     title: "Resume — Ayodele John",
     description:
-      "Ayodele John's work experience, education, certifications, and technical skills.",
+      "Explore Ayodele John's experience and skills in frontend, backend, mobile app development, and cloud engineering, plus education and certifications.",
     url: "/about",
     type: "profile",
   },

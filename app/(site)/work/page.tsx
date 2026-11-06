@@ -10,7 +10,7 @@ const PAGE_SIZE = 6;
 
 const title = "Work";
 const description =
-  "A showcase of Ayodele John's latest projects, highlighting thoughtful engineering, clear systems, and real-world results.";
+  "Explore Ayodele John's software projects across frontend web development, backend systems, mobile applications, and cloud infrastructure.";
 
 export async function generateMetadata({
   searchParams,

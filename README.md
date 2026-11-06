@@ -1,6 +1,6 @@
 # Hey, I'm Ayodele 👋
 
-Lead Backend Engineer at [Sonaroid](https://sonaroid.io/), based in Nigeria. I build production-grade platforms end-to-end — backend systems, fintech/payments infrastructure, cloud architecture, and the interfaces that ship them. Open to remote full-time roles and contract/consulting work.
+Software engineer working across frontend web development, backend systems, mobile apps, and cloud server engineering. Currently Lead Backend Engineer at [Sonaroid](https://sonaroid.io/). I build production-grade platforms end-to-end — backend systems, fintech/payments infrastructure, cloud architecture, and the interfaces that ship them. Open to remote full-time roles and contract/consulting work.
 
 📍 Nigeria &nbsp;·&nbsp; 🌍 Open to remote, worldwide &nbsp;·&nbsp; ✉️ [info@deledev.com](mailto:info@deledev.com)
 
@@ -9,6 +9,9 @@ Lead Backend Engineer at [Sonaroid](https://sonaroid.io/), based in Nigeria. I b
 [![X](https://img.shields.io/badge/X-%40dele__dev-000000?style=flat-square&logo=x&logoColor=white)](https://x.com/dele_dev)
 
 ## What I work on
+
+- **Frontend Web Development** ? React, Next.js, TypeScript, responsive interfaces
+- **Mobile App Development** ? React Native, cross-platform apps, API integration
 
 - **Backend & API Engineering** — NestJS, Node.js, TypeScript, REST, GraphQL, microservices
 - **Fintech & Payments Systems** — multi-currency billing, Paystack/Flutterwave integration, FX-rate locking, earnings ledgers, withdrawal workflows
