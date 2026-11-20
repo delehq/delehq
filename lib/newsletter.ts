@@ -17,7 +17,8 @@ export async function subscribeToNewsletter(email: string): Promise<SubscribeRes
       Authorization: `Token ${apiKey}`,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ email_address: email }),
+    body: JSON.stringify({ email_address: email.trim() }),
+    signal: AbortSignal.timeout(8000),
   });
 
   if (res.ok) return { success: true };
